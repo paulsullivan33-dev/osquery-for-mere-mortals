@@ -1,0 +1,40 @@
+$ osqueryi "SELECT * FROM os_version;"
++--------+----------------------------+-------+-------+-------+-------+----------+---------------+----------+--------+
+| name   | version                    | major | minor | patch | build | platform | platform_like | codename | arch   |
++--------+----------------------------+-------+-------+-------+-------+----------+---------------+----------+--------+
+| Ubuntu | 24.04.5 LTS (Noble Numbat) | 24    | 4     | 0     |       | ubuntu   | debian        | noble    | x86_64 |
++--------+----------------------------+-------+-------+-------+-------+----------+---------------+----------+--------+
+[exit 0]
+
+$ osqueryi "SELECT * FROM uptime;"
++------+-------+---------+---------+---------------+
+| days | hours | minutes | seconds | total_seconds |
++------+-------+---------+---------+---------------+
+| 0    | 0     | 51      | 13      | 3073          |
++------+-------+---------+---------+---------------+
+[exit 0]
+
+$ osqueryi "SELECT hostname, cpu_brand, physical_memory, hardware_vendor, hardware_model FROM system_info;"
++--------------+-------------------------------------------------+-----------------+-----------------+----------------+
+| hostname     | cpu_brand                                       | physical_memory | hardware_vendor | hardware_model |
++--------------+-------------------------------------------------+-----------------+-----------------+----------------+
+| htch-runtime | AMD EPYC 9D25 126-Core Processor                | 8319901696      |                 |                |
++--------------+-------------------------------------------------+-----------------+-----------------+----------------+
+[exit 0]
+
+$ osqueryi "SELECT version, build_platform, platform FROM osquery_info;"
+Error: no such column: platform
+[exit 1]
+
+$ printf '.schema osquery_info\n' | osqueryi
+CREATE TABLE osquery_info(`pid` INTEGER, `uuid` TEXT COLLATE NOCASE, `instance_id` TEXT, `version` TEXT COLLATE VERSION, `config_hash` TEXT COLLATE NOCASE, `config_valid` INTEGER, `extensions` TEXT, `build_platform` TEXT, `build_distro` TEXT, `start_time` INTEGER, `watcher` INTEGER, `platform_mask` INTEGER);
+[exit 0]
+
+$ osqueryi "SELECT version, build_platform, build_distro FROM osquery_info;"
++---------+----------------+--------------+
+| version | build_platform | build_distro |
++---------+----------------+--------------+
+| 5.24.0  | linux          | centos7      |
++---------+----------------+--------------+
+[exit 0]
+

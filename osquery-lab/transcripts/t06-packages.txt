@@ -1,0 +1,56 @@
+$ osqueryi "SELECT COUNT(*) AS deb_rows FROM deb_packages;"
++----------+
+| deb_rows |
++----------+
+| 2078     |
++----------+
+[exit 0]
+
+$ osqueryi "SELECT name, version, arch, source FROM deb_packages WHERE name = 'osquery';"
++---------+----------------+-------+--------+
+| name    | version        | arch  | source |
++---------+----------------+-------+--------+
+| osquery | 5.24.0-1.linux | amd64 |        |
++---------+----------------+-------+--------+
+[exit 0]
+
+$ osqueryi "SELECT source, COUNT(*) AS packages FROM deb_packages GROUP BY source ORDER BY packages DESC LIMIT 8;"
++-------------+----------+
+| source      | packages |
++-------------+----------+
+|             | 331      |
+| libreoffice | 36       |
+| boost1.83   | 24       |
+| gnuradio    | 23       |
+| libxcb      | 21       |
+| vlc         | 15       |
+| qt6-base    | 15       |
+| php8.3      | 15       |
++-------------+----------+
+[exit 0]
+
+$ osqueryi "SELECT COUNT(*) AS no_source_package FROM deb_packages WHERE source = '';"
++-------------------+
+| no_source_package |
++-------------------+
+| 331               |
++-------------------+
+[exit 0]
+
+$ osqueryi "SELECT name, version FROM deb_packages WHERE source = '' LIMIT 10;"
++--------------------+-----------------------------------+
+| name               | version                           |
++--------------------+-----------------------------------+
+| 7zip               | 23.01+dfsg-11                     |
+| aardvark-dns       | 1.4.0-5                           |
+| acl                | 2.3.2-1build1.1                   |
+| adduser            | 3.137ubuntu1                      |
+| adwaita-icon-theme | 46.0-1                            |
+| anacron            | 2.3-39ubuntu2                     |
+| apparmor           | 4.0.1really4.0.1-0ubuntu0.24.04.9 |
+| appstream          | 1.0.2-1build6                     |
+| apt                | 2.8.3                             |
+| aspell             | 0.60.8.1-1build1                  |
++--------------------+-----------------------------------+
+[exit 0]
+

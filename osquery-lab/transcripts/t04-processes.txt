@@ -1,0 +1,41 @@
+$ osqueryi "SELECT COUNT(*) AS process_rows FROM processes;"
++--------------+
+| process_rows |
++--------------+
+| 32           |
++--------------+
+[exit 0]
+
+$ osqueryi "SELECT pid, name, ROUND(resident_size/1048576.0, 1) AS rss_mb FROM processes ORDER BY resident_size DESC LIMIT 10;"
++-------+-----------------+--------+
+| pid   | name            | rss_mb |
++-------+-----------------+--------+
+| 67    | hatch           | 332.9  |
+| 72827 | tqsl            | 122.9  |
+| 72581 | Plex Script Hos | 42.1   |
+| 71349 | git             | 36.1   |
+| 71352 | Plex Script Hos | 35.6   |
+| 72213 | Plex Script Hos | 34.3   |
+| 72626 | Plex Script Hos | 34.2   |
+| 71296 | Xvfb            | 28.3   |
+| 71293 | Plex Media Serv | 22.6   |
+| 72848 | osqueryi        | 21.1   |
++-------+-----------------+--------+
+[exit 0]
+
+$ osqueryi "SELECT uid, COUNT(*) AS processes FROM processes GROUP BY uid ORDER BY processes DESC;"
++-----+-----------+
+| uid | processes |
++-----+-----------+
+| 0   | 33        |
++-----+-----------+
+[exit 0]
+
+$ osqueryi "SELECT pid, name, path, cmdline FROM processes WHERE pid = 1;"
++-----+---------+--------------------------+--------------------------+
+| pid | name    | path                     | cmdline                  |
++-----+---------+--------------------------+--------------------------+
+| 1   | systemd | /usr/lib/systemd/systemd | /usr/lib/systemd/systemd |
++-----+---------+--------------------------+--------------------------+
+[exit 0]
+

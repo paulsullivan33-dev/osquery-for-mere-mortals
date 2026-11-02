@@ -1,0 +1,28 @@
+site_name: osquery for Mere Mortals
+site_description: Ask your computer questions in SQL. osquery turns an operating system into tables you can query — processes, ports, packages, users — with an interactive shell for asking now, query packs for asking together, and a daemon that asks on a schedule and logs how the answers change, with the limits stated plainly.
+site_url: https://paulsullivan33-dev.github.io/osquery-for-mere-mortals/
+copyright: 'Part of <a href="https://paulsullivan33-dev.github.io/mere-mortals/">For Mere Mortals</a> · Text <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, code MIT'
+
+# Guides live at the repo root (nice for GitHub browsing).
+# The deploy workflow copies them into docs/ before building.
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - What osquery Is: what-osquery-is.md
+  - The Moving Parts: the-moving-parts.md
+  - Installing osquery: installing-osquery.md
+  - Your First Queries: your-first-queries.md
+  - Accounts and Processes: accounts-and-processes.md
+  - Ports, Packages and Files: ports-packages-and-files.md
+  - Shaping Queries: shaping-queries.md
+  - Output and Scripting: output-and-scripting.md
+  - Query Packs: query-packs.md
+  - Scheduling with osqueryd: scheduling-with-osqueryd.md
+  - Recipes: recipes.md
+  - The Neighbours: the-neighbours.md
+  - Limits: limits.md
+  - Troubleshooting: troubleshooting.md
+  - Glossary: glossary.md
+  - Writing Criteria: criteria.md

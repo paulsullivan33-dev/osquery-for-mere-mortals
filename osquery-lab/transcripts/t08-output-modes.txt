@@ -1,0 +1,39 @@
+$ osqueryi --json "SELECT name, version, codename FROM os_version;"
+[
+  {"codename":"noble","name":"Ubuntu","version":"24.04.5 LTS (Noble Numbat)"}
+]
+[exit 0]
+
+$ osqueryi --csv "SELECT port, protocol FROM listening_ports WHERE port > 0 GROUP BY port, protocol ORDER BY port LIMIT 5;"
+port|protocol
+1901|17
+32400|6
+32401|6
+32410|17
+32412|17
+[exit 0]
+
+$ printf '.mode line\nSELECT name, version FROM os_version;\n' | osqueryi
+   name = Ubuntu
+version = 24.04.5 LTS (Noble Numbat)
+[exit 0]
+
+$ osqueryi --json "SELECT port FROM listening_ports WHERE port > 0;" | python3 osquery-lab/count-ports.py
+17 distinct ports across 34 rows
+[exit 0]
+
+$ for t in os_version uptime; do osqueryi --json "SELECT * FROM $t;"; done > inventory.json; osqueryi --json "SELECT hostname, physical_memory FROM system_info;" >> inventory.json; osqueryi --json "SELECT COUNT(*) AS processes FROM processes;" >> inventory.json; cat inventory.json
+[
+  {"arch":"x86_64","build":"","codename":"noble","major":"24","minor":"4","name":"Ubuntu","patch":"0","platform":"ubuntu","platform_like":"debian","version":"24.04.5 LTS (Noble Numbat)"}
+]
+[
+  {"days":"0","hours":"0","minutes":"59","seconds":"44","total_seconds":"3584"}
+]
+[
+  {"hostname":"htch-runtime","physical_memory":"8319901696"}
+]
+[
+  {"processes":"48"}
+]
+[exit 0]
+

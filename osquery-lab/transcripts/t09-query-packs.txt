@@ -1,0 +1,47 @@
+$ python3 -m json.tool osquery-lab/lab-pack.json > /dev/null && echo pack-json-ok
+pack-json-ok
+[exit 0]
+
+$ sudo cp osquery-lab/osquery.conf /etc/osquery/osquery.conf; sudo cp osquery-lab/lab-pack.json /etc/osquery/packs/lab-pack.json
+/etc/osquery/:
+total 4
+drwxr-xr-x 1 root root   34 Nov  2 15:23 .
+drwxr-xr-x 1 root root 2638 Nov  2 15:21 ..
+-rw-rw---- 1 root root  413 Nov  2 15:23 osquery.conf
+drwxrwx--- 1 root root   26 Nov  2 15:23 packs
+
+/etc/osquery/packs/:
+total 4
+drwxrwx--- 1 root root  26 Nov  2 15:23 .
+drwxr-xr-x 1 root root  34 Nov  2 15:23 ..
+-rw-rw---- 1 root root 594 Nov  2 15:23 lab-pack.json
+[exit 0]
+
+$ osqueryd --config_check --config_path=/etc/osquery/osquery.conf; echo config_check_exit=$?
+I1102 15:23:04.788110 73797 database.cpp:655] Failed to obtain database version. Assume version '0' and migrate.
+config_check_exit=0
+[exit 0]
+
+$ osqueryctl config-check
+[exit 0]
+
+$ osqueryi --config_path=/etc/osquery/osquery.conf "SELECT name FROM osquery_packs;"
++------+
+| name |
++------+
+| main |
+| lab  |
++------+
+[exit 0]
+
+$ osqueryi --config_path=/etc/osquery/osquery.conf "SELECT name, interval, executions FROM osquery_schedule ORDER BY name;"
++------------------------+----------+------------+
+| name                   | interval | executions |
++------------------------+----------+------------+
+| lab_uptime             | 15       | 0          |
+| lab_user_count         | 15       | 0          |
+| pack_lab_os_version    | 20       | 0          |
+| pack_lab_tcp_listeners | 20       | 0          |
+| pack_lab_top_processes | 20       | 0          |
++------------------------+----------+------------+
+[exit 0]

@@ -1,0 +1,40 @@
+$ setsid osqueryd --config_path=/etc/osquery/osquery.conf --database_path=osquery-labwork/daemon/osquery.db --logger_path=osquery-labwork/daemon/logs --pidfile=osquery-labwork/daemon/osqueryd.pid --disable_watchdog=true &
+(launched detached for this experiment and stopped again at the end of it;
+ on a real machine the package's service unit does this job — see the chapter)
+
+$ ps -p $(cat osqueryd.pid) -o pid,etime,cmd
+    PID     ELAPSED CMD
+  81349       01:21 osqueryd --config_path=/etc/osquery/osquery.conf --database_path=/home/hatch/workspace/osquery-labwork/daemon/osquery.db --logger_path=/home/hatch/workspace/osquery-labwork/daemon/logs --pidfile=/home/hatch/workspace/osquery-labwork/daemon/osqueryd.pid --disable_watchdog=true
+[exit 0]
+
+$ python3 count of results-log lines by query name
+lab_uptime: 11
+lab_user_count: 1
+pack_lab_os_version: 1
+pack_lab_tcp_listeners: 9
+pack_lab_top_processes: 35
+total lines: 57
+[exit 0]
+
+$ head -2 osqueryd.results.log
+{"name":"lab_uptime","hostIdentifier":"htch-runtime","calendarTime":"Mon Nov  2 15:24:48 2026 UTC","unixTime":1793633088,"epoch":0,"counter":0,"numerics":false,"columns":{"days":"0","hours":"0","minutes":"54","total_seconds":"3275"},"action":"added"}
+{"name":"lab_user_count","hostIdentifier":"htch-runtime","calendarTime":"Mon Nov  2 15:24:48 2026 UTC","unixTime":1793633088,"epoch":0,"counter":0,"numerics":false,"columns":{"user_rows":"41"},"action":"added"}
+[exit 0]
+
+$ kill $(cat osqueryd.pid) — stop the experiment's daemon
+    PID CMD
+daemon stopped; pidfile removed by osqueryd itself
+[exit 0]
+
+$ osqueryi --config_path=/etc/osquery/osquery.conf --database_path=osquery-labwork/daemon/osquery.db "SELECT name, executions FROM osquery_schedule ORDER BY name;"
++------------------------+------------+
+| name                   | executions |
++------------------------+------------+
+| lab_uptime             | 6          |
+| lab_user_count         | 6          |
+| pack_lab_os_version    | 4          |
+| pack_lab_tcp_listeners | 4          |
+| pack_lab_top_processes | 4          |
++------------------------+------------+
+[exit 0]
+

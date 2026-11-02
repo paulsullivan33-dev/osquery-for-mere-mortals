@@ -1,0 +1,39 @@
+$ osqueryi "SELECT * FROM no_such_table;"
+Error: no such table: no_such_table
+[exit 1]
+
+$ osqueryi "SELEC name FROM os_version;"
+Error: near "SELEC": syntax error
+[exit 1]
+
+$ printf '.schema no_such_table\n' | osqueryi
+[exit 0]
+
+$ osqueryd --config_check --config_path=osquery-labwork/broken.conf; echo exit=$?
+E1102 15:26:25.798794 82648 config.cpp:989] updateSource failed to parse config, of source: /home/hatch/workspace/osquery-labwork/broken.conf and content: { "schedule": { "broken": 
+Error reading config: Error parsing the config JSON
+exit=1
+[exit 0]
+
+$ osqueryctl status
+○ osqueryd.service - osquery daemon
+     Loaded: loaded (/usr/lib/systemd/system/osqueryd.service; disabled; preset: enabled)
+     Active: inactive (dead)
+[exit 3]
+
+$ su -s /bin/sh nobody -c 'osqueryi "SELECT COUNT(*) AS shadow_rows FROM shadow;"'
++-------------+
+| shadow_rows |
++-------------+
+| 0           |
++-------------+
+[exit 0]
+
+$ osqueryi "SELECT COUNT(*) AS shadow_rows FROM shadow;" (as root, for contrast)
++-------------+
+| shadow_rows |
++-------------+
+| 41          |
++-------------+
+[exit 0]
+

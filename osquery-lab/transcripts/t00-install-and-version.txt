@@ -1,0 +1,49 @@
+$ uname -a; head -3 /etc/os-release
+Linux htch-runtime 7.0.0-39-generic #1 SMP PREEMPT_DYNAMIC Thu Sep 24 08:42:15 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+[exit 0]
+
+$ sha256sum osquery_5.24.0-1.linux_amd64.deb
+8ae0416d85336a1aea6883920ae9c2751a98538fe0bb624822e92934d3be5592  /home/hatch/workspace/osquery-labwork/downloads/osquery_5.24.0-1.linux_amd64.deb
+[exit 0]
+
+$ sudo dpkg -i osquery_5.24.0-1.linux_amd64.deb
+Selecting previously unselected package osquery.
+(Reading database ... 186057 files and directories currently installed.)
+Preparing to unpack .../osquery_5.24.0-1.linux_amd64.deb ...
+Unpacking osquery (5.24.0-1.linux) ...
+Setting up osquery (5.24.0-1.linux) ...
+1
+[exit 0]
+
+$ osqueryi --version
+osqueryi version 5.24.0
+[exit 0]
+
+$ osqueryd --version
+osqueryd version 5.24.0
+[exit 0]
+
+$ which osqueryi osqueryd osqueryctl; dpkg -l osquery | tail -1
+/usr/bin/osqueryi
+/usr/bin/osqueryd
+/usr/bin/osqueryctl
+ii  osquery        5.24.0-1.linux amd64        osquery is an operating system instrumentation toolchain.
+[exit 0]
+
+$ ls /opt/osquery/share/osquery/packs/
+README.md
+hardware-monitoring.conf
+incident-response.conf
+it-compliance.conf
+osquery-monitoring.conf
+ossec-rootkit.conf
+osx-attacks.conf
+unwanted-chrome-extensions.conf
+vuln-management.conf
+windows-attacks.conf
+windows-hardening.conf
+[exit 0]
+

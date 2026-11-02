@@ -1,0 +1,33 @@
+$ osqueryi "SELECT COUNT(*) AS user_rows FROM users;"
++-----------+
+| user_rows |
++-----------+
+| 41        |
++-----------+
+[exit 0]
+
+$ osqueryi "SELECT uid, username, description, directory, shell FROM users WHERE uid >= 1000 OR uid = 0;"
++-------+----------+-------------+--------------+-------------------+
+| uid   | username | description | directory    | shell             |
++-------+----------+-------------+--------------+-------------------+
+| 65534 | nobody   | nobody      | /nonexistent | /usr/sbin/nologin |
+| 0     | root     | root        | /root        | /bin/bash         |
++-------+----------+-------------+--------------+-------------------+
+[exit 0]
+
+$ osqueryi "SELECT * FROM logged_in_users;"
++-----------+--------+-----+------------------+------------+-----+
+| type      | user   | tty | host             | time       | pid |
++-----------+--------+-----+------------------+------------+-----+
+| boot_time | reboot | ~   | 7.0.0-39-generic | 1793629823 | 0   |
++-----------+--------+-----+------------------+------------+-----+
+[exit 0]
+
+$ osqueryi "SELECT type, user, tty, host, time FROM logged_in_users ORDER BY time;"
++-----------+--------+-----+------------------+------------+
+| type      | user   | tty | host             | time       |
++-----------+--------+-----+------------------+------------+
+| boot_time | reboot | ~   | 7.0.0-39-generic | 1793629823 |
++-----------+--------+-----+------------------+------------+
+[exit 0]
+

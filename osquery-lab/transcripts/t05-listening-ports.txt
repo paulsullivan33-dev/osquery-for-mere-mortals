@@ -1,0 +1,70 @@
+$ osqueryi "SELECT COUNT(*) AS all_rows FROM listening_ports;"
++----------+
+| all_rows |
++----------+
+| 354      |
++----------+
+[exit 0]
+
+$ osqueryi "SELECT COUNT(*) AS owner_unknown FROM listening_ports WHERE pid = -1;"
++---------------+
+| owner_unknown |
++---------------+
+| 294           |
++---------------+
+[exit 0]
+
+$ osqueryi "SELECT COUNT(*) AS real_listeners FROM listening_ports WHERE port > 0;"
++----------------+
+| real_listeners |
++----------------+
+| 32             |
++----------------+
+[exit 0]
+
+$ osqueryi "SELECT DISTINCT port, protocol, address FROM listening_ports WHERE port > 0 ORDER BY port;"
++-------+----------+------------+
+| port  | protocol | address    |
++-------+----------+------------+
+| 1901  | 17       | 0.0.0.0    |
+| 32400 | 6        | 0.0.0.0    |
+| 32401 | 6        | 127.0.0.1  |
+| 32410 | 17       | 0.0.0.0    |
+| 32412 | 17       | 0.0.0.0    |
+| 32413 | 17       | 0.0.0.0    |
+| 32414 | 17       | 0.0.0.0    |
+| 32600 | 6        | 127.0.0.1  |
+| 34933 | 6        | 127.0.0.1  |
+| 42063 | 6        | 127.0.0.1  |
+| 42758 | 17       | 127.0.0.1  |
+| 43592 | 17       | 127.0.0.1  |
+| 43833 | 6        | 127.0.0.1  |
+| 44190 | 17       | 198.19.0.2 |
+| 44421 | 17       | 198.19.0.2 |
+| 47282 | 17       | 198.19.0.2 |
++-------+----------+------------+
+[exit 0]
+
+$ osqueryi "SELECT DISTINCT lp.port, lp.protocol, p.name, lp.pid FROM listening_ports lp JOIN processes p ON lp.pid = p.pid WHERE lp.port > 0 ORDER BY lp.port;"
++-------+----------+-----------------+-------+
+| port  | protocol | name            | pid   |
++-------+----------+-----------------+-------+
+| 1901  | 17       | Plex Media Serv | 71293 |
+| 32400 | 6        | Plex Media Serv | 71293 |
+| 32401 | 6        | Plex Media Serv | 71293 |
+| 32410 | 17       | Plex Media Serv | 71293 |
+| 32412 | 17       | Plex Media Serv | 71293 |
+| 32413 | 17       | Plex Media Serv | 71293 |
+| 32414 | 17       | Plex Media Serv | 71293 |
+| 32600 | 6        | Plex Tuner Serv | 71435 |
+| 34933 | 6        | Plex Script Hos | 71352 |
+| 42063 | 6        | Plex Script Hos | 72581 |
+| 42758 | 17       | Plex Media Serv | 71293 |
+| 43592 | 17       | Plex Media Serv | 71293 |
+| 43833 | 6        | Plex Script Hos | 72213 |
+| 44190 | 17       | Plex Media Serv | 71293 |
+| 44421 | 17       | Plex Media Serv | 71293 |
+| 47282 | 17       | Plex Media Serv | 71293 |
++-------+----------+-----------------+-------+
+[exit 0]
+

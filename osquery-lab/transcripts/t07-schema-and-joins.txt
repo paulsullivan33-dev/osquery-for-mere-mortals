@@ -1,0 +1,43 @@
+$ printf '.schema processes\n' | osqueryi
+CREATE TABLE processes(`pid` BIGINT, `name` TEXT, `path` TEXT, `cmdline` TEXT, `state` TEXT, `cwd` TEXT, `root` TEXT, `uid` BIGINT, `gid` BIGINT, `euid` BIGINT, `egid` BIGINT, `suid` BIGINT, `sgid` BIGINT, `on_disk` INTEGER, `wired_size` BIGINT, `resident_size` BIGINT, `total_size` BIGINT, `user_time` BIGINT, `system_time` BIGINT, `disk_bytes_read` BIGINT, `disk_bytes_written` BIGINT, `start_time` BIGINT, `parent` BIGINT, `pgroup` BIGINT, `threads` INTEGER, `nice` INTEGER, `elevated_token` INTEGER HIDDEN, `secure_process` INTEGER HIDDEN, `protection_type` TEXT HIDDEN, `virtual_process` INTEGER HIDDEN, `elapsed_time` BIGINT HIDDEN, `handle_count` BIGINT HIDDEN, `percent_processor_time` BIGINT HIDDEN, `upid` BIGINT HIDDEN, `uppid` BIGINT HIDDEN, `cpu_type` INTEGER HIDDEN, `cpu_subtype` INTEGER HIDDEN, `translated` INTEGER HIDDEN, `cgroup_path` TEXT, PRIMARY KEY (`pid`)) WITHOUT ROWID;
+[exit 0]
+
+$ osqueryi "SELECT p.pid, p.name, u.username FROM processes p JOIN users u ON p.uid = u.uid ORDER BY p.pid LIMIT 8;"
++-------+-----------------+----------+
+| pid   | name            | username |
++-------+-----------------+----------+
+| 1     | systemd         | root     |
+| 17    | systemd-journal | root     |
+| 67    | hatch           | root     |
+| 752   | hatch-execd     | root     |
+| 71130 | bash            | root     |
+| 71131 | bash            | root     |
+| 71132 | tee             | root     |
+| 71134 | make            | root     |
++-------+-----------------+----------+
+[exit 0]
+
+$ osqueryi "SELECT datetime(local_time, 'unixepoch') AS now_local, timezone FROM time;"
+Error: no such column: local_time
+[exit 1]
+
+$ osqueryi "SELECT md5, sha1, sha256 FROM hash WHERE path = '/usr/bin/osqueryi';"
++----------------------------------+------------------------------------------+------------------------------------------------------------------+
+| md5                              | sha1                                     | sha256                                                           |
++----------------------------------+------------------------------------------+------------------------------------------------------------------+
+| 837810e2b05b2c69fb739742c21c8cfc | 22aea3a1d64661ac9629a19ae6f176347b6df4cf | a3392d689294f879a500dc78ecb404afb74bfbe553701fa49509181f28e9df89 |
++----------------------------------+------------------------------------------+------------------------------------------------------------------+
+[exit 0]
+
+$ printf '.schema time\n' | osqueryi
+CREATE TABLE time(`weekday` TEXT, `year` INTEGER, `month` INTEGER, `day` INTEGER, `hour` INTEGER, `minutes` INTEGER, `seconds` INTEGER, `timezone` TEXT, `local_timezone` TEXT, `unix_time` INTEGER, `timestamp` TEXT, `datetime` TEXT, `iso_8601` TEXT, `win_timestamp` BIGINT HIDDEN, `date_time` TEXT HIDDEN);
+[exit 0]
+
+$ osqueryi "SELECT datetime(unix_time, 'unixepoch') AS utc_now, weekday, timezone FROM time;"
++---------------------+---------+----------+
+| utc_now             | weekday | timezone |
++---------------------+---------+----------+
+| 2026-11-02 15:22:41 | Monday  | UTC      |
++---------------------+---------+----------+
+[exit 0]
+
